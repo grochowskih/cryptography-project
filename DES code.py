@@ -233,4 +233,3 @@ def TripleDesDecrypt(block, key1, key2, key3):
     :return: Tekst odszyfrowany algorytmem 3DES.
     """
     return decrypt(enrycpt(decrypt(block,key3),key2),key1)
-\

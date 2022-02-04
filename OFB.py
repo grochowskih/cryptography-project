@@ -75,8 +75,12 @@ def ofb_encrypt(plaintext, key1, key2, key3, iv):
         xor = int(blocks[i], 2) ^ int(current_vector, 2)
         encrypted_blocks.append('{0:b}'.format(xor))
 
-    print(binary_to_hex(''.join(encrypted_blocks)))
-    return binary_to_hex(''.join(encrypted_blocks))
+    enc_hex = []
+    for i in range(0, len(blocks)):
+        enc_hex.append(binary_to_hex(encrypted_blocks[i]))
+
+    print(''.join(enc_hex))
+    return ''.join(enc_hex)
 
 
 def ofb_decrypt(ciphertext, key1, key2, key3, iv):

@@ -136,7 +136,7 @@ def SBox(block):
         k +=1
     return Output
 
-def enrycpt(block,key):
+def encrypt(block,key):
     """
     Funkcja szyfruje podany blok, przy za pomocą podanego klucza.
     :param block: Blok tekstu, który chcemy zaszyfrować.
@@ -221,7 +221,7 @@ def TripleDesEncrypt(block, key1, key2, key3):
     :param key3: Trzeci klucz.
     :return: Tekst zaszyfrowany algorytmem 3DES.
     """
-    return enrycpt(decrypt(enrycpt(block,key1), key2),key3)
+    return encrypt(decrypt(encrypt(block,key1), key2),key3)
 
 def TripleDesDecrypt(block, key1, key2, key3):
     """
@@ -232,4 +232,4 @@ def TripleDesDecrypt(block, key1, key2, key3):
     :param key3: Trzeci Klucz.
     :return: Tekst odszyfrowany algorytmem 3DES.
     """
-    return decrypt(enrycpt(decrypt(block,key3),key2),key1)
+    return decrypt(encrypt(decrypt(block,key3),key2),key1)

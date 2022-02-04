@@ -36,7 +36,7 @@ def sigma_0(word):
     :return: Przekształcone słowo x
     """
     x = int(word, 2)
-    return ((x >> 1) or (x << 63)) ^ ((x >> 8) or (x << 56)) ^ (x >> 7)
+    return (rotr(word, 1)) ^ (rotr(word, 8)) ^ (x >> 7)
 
 
 def sigma_1(word):
@@ -47,7 +47,45 @@ def sigma_1(word):
     :return: Przekształcone słowo x
     """
     x = int(word, 2)
-    return ((x >> 19) or (x << 45)) ^ ((x >> 61) or (x << 3)) ^ (x >> 6)
+    return (rotr(word, 19)) ^ (rotr(word, 61)) ^ (x >> 6)
+
+
+def rotr(word, n):
+    """
+    Funkcja ROTR występująca w standardzie NIST.
+    Na podstawie: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf
+    :param word: Binarne słowo
+    :param n: Przesunięcie w funkcji ROTR
+    :return: ROTR(word)
+    """
+    x = int(word, 2)
+    return (x >> n) | (x << (64 - n))
+
+
+def ch(word_1, word_2, word_3):
+    """
+    Funkcja Ch występująca w standardzie NIST.
+    Na podstawie: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf
+    :param word_1: Binarne słowo
+    :param word_2: Binarne słowo
+    :param word_3: Binarne słowo
+    :return: Ch(word_1, word_2, word_3)
+    """
+    x, y, z = int(word_1, 2), int(word_2, 2), int(word_3, 2)
+    return (x & y) ^ (~x & z)
+
+
+def maj(word_1, word_2, word_3):
+    """
+    Funkcja Maj występująca w standardzie NIST.
+    Na podstawie: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf
+    :param word_1: Binarne słowo
+    :param word_2: Binarne słowo
+    :param word_3: Binarne słowo
+    :return: Maj(word_1, word_2, word_3)
+    """
+    x, y, z = int(word_1, 2), int(word_2, 2), int(word_3, 2)
+    return (x & y) ^ (y & z) ^ (x & z)
 
 
 def pad_1024(msg):
@@ -60,9 +98,13 @@ def pad_1024(msg):
     if re.match("^[01]+$", msg) is None:
         raise Exception("Błędna wiadomość do obliczenia skrótu!")
 
+    # Wiadomość musi być tak, ze każdy znak jest długości 8, zatem jeśli nie jest tak, to musimy dostawić 0
     length_msg = len(msg)
-    length_msg_moduli = length_msg % 1024
+    while length_msg % 8 != 0:
+        msg = "0" + msg
+        length_msg = len(msg)
 
+    length_msg_moduli = length_msg % 1024
     k = (896 - 1 - length_msg_moduli) % 1024  # Rozwiązanie liniowej kongruencji występującej w paddingu
 
     length_bin = '{0:0128b}'.format(length_msg)  # Długość wiadomości zapisana za pomocą bitów długości 128
@@ -78,24 +120,28 @@ def sha384_algorithm(msg):
     :return: Skrót wiadomości msg
     """
 
-    N = len(msg) // 1024
-    msg_blocks = [msg[i:i + 64] for i in range(N)]
+    N = int(len(msg) / 1024)
+    msg_blocks = [msg[i:i + 1024] for i in range(N)]
     h_seq = [['{0:064b}'.format(el) for el in INIT_VALUES]]  # Ustawienie wartości inicjalnych w formacie binarnym
 
-    iter = 1  # Dodatkowy iterator pętli dla ułatwienia zapisu
+    iterator = 0  # Dodatkowy iterator pętli dla ułatwienia zapisu
     for block in msg_blocks:  # Dla każdego bloku po kolei
-        w_seq = [block[i:i + 64] for i in
-                 range(1024 // 64)]  # Słowa występujące w bloku to pierwszych 16 elementów ciągu
+        iterator = iterator + 1  # Wzrost iteratora
+        w_seq = [block[i*64:i*64+64] for i in
+                 range(int(1024 / 64))] # Słowa występujące w bloku to pierwszych 16 elementów ciągu
         for k in range(16, 80):  # dla każdego k od 16 do 79
-            w = '{0:064b}'.format((int(sigma_1(w_seq[k - 2])) + int(w_seq[k - 7], 2) + int(sigma_0(w_seq[k - 15])) + int(
-                w_seq[k - 16], 2)) % pow(2, 64))  # Operacja wyznaczania kolejnych elementów ciągu W
+            w = '{0:064b}'.format(
+                (int(sigma_1(w_seq[k - 2])) + int(w_seq[k - 7], 2) + int(sigma_0(w_seq[k - 15])) + int(
+                    w_seq[k - 16], 2)) % pow(2, 64))  # Operacja wyznaczania kolejnych elementów ciągu W
             w_seq.append(w)
 
-        a_seq = h_seq[iter - 1].copy()  # Ustawienie wartości #A_k dla k od 0 do 7 - w standardzie NIST a,b,c,d,e,f,g,h
-
+        a_seq = h_seq[iterator - 1].copy()  # Ustawienie wartości #A_k dla k od 0 do 7 - w standardzie NIST a,b,c,d,e,f,g,h
         for k in range(0, 80):  # Dla każdego k od 0 do 79 włącznie
-            t_1 = '{0:064b}'.format((int(a_seq[7], 2) + (((int(a_seq[4], 2) >> 14) or (int(a_seq[4], 2) << 50)) ^ ((int(a_seq[4], 2) >> 18) or (int(a_seq[4], 2) << 46)) ^ ((int(a_seq[4], 2) >> 41) or (int(a_seq[4], 2) << 23))) + int(w_seq[k], 2) + CONST_VALUES[k] + ((int(a_seq[4], 2) and int(a_seq[5], 2)) ^ (( not (int(a_seq[4], 2)) ) and int(a_seq[6], 2)))) % pow(2, 64))
-            t_2 = '{0:064b}'.format(((((int(a_seq[0], 2) >> 28) or (int(a_seq[0], 2) << 36)) ^ ((int(a_seq[0], 2) >> 34) or (int(a_seq[0], 2) << 30)) ^ ((int(a_seq[0], 2) >> 39) or (int(a_seq[0], 2) << 25))) + ((int(a_seq[0], 2) and int(a_seq[1], 2)) ^ (int(a_seq[1], 2) and int(a_seq[2], 2)) ^ (int(a_seq[0], 2) and int(a_seq[2], 2)))) % pow(2, 64))
+            t_1 = '{0:064b}'.format((int(a_seq[7], 2) + (rotr(a_seq[4], 14) ^ rotr(a_seq[4], 18) ^ rotr(a_seq[4], 41)) +
+                                     CONST_VALUES[k] + ch(a_seq[4], a_seq[5], a_seq[6])
+                                     + int(w_seq[k], 2)) % pow(2, 64))
+            t_2 = '{0:064b}'.format(((rotr(a_seq[0], 28) ^ rotr(a_seq[0], 34) ^ rotr(a_seq[0], 39)) +
+                                     maj(a_seq[0], a_seq[1], a_seq[2])) % pow(2, 64))
             a_seq[7] = a_seq[6]
             a_seq[6] = a_seq[5]
             a_seq[5] = a_seq[4]
@@ -105,10 +151,9 @@ def sha384_algorithm(msg):
             a_seq[1] = a_seq[0]
             a_seq[0] = '{0:064b}'.format((int(t_2, 2) + int(t_1, 2)) % pow(2, 64))
 
-            new_h = ['{0:064b}'.format((int(a_seq[kk],2) + int(h_seq[iter - 1][kk],2)) % pow(2,64)) for kk in range(8)]  # Wyliczenie H^i dla i-tego bloku
-            h_seq.append(new_h)  # Dodanie go do ciągu H
-
-            iter = iter + 1  # Wzrost iteratora
+        new_h = ['{0:064b}'.format((int(a_seq[kk], 2) + int(h_seq[iterator - 1][kk], 2)) % pow(2, 64)) for kk in
+                     range(8)]  # Wyliczenie H^i dla i-tego bloku
+        h_seq.append(new_h)  # Dodanie go do ciągu H
 
     return h_seq[N][0] + h_seq[N][1] + h_seq[N][2] + h_seq[N][3] + h_seq[N][4] + h_seq[N][5]
 
@@ -119,12 +164,5 @@ def sha384(msg):
     :param msg: Wiadomość (w bitach)
     :return: Skrót wiadomości msg
     """
-
     pad_msg = pad_1024(msg)
     return sha384_algorithm(pad_msg)
-
-
-# Przykład
-print(bin(int("1e240", 16))[2:])
-print(hex(int(sha384(bin(int("1e240", 16))[2:]), 2))[2:])
-print("01bc9e91eae473030eea3d17a01669df0b325fb175a8805906c4c674013a3acb2cbede4043bd55566aa08c91688584d0")

@@ -62,9 +62,17 @@ def verify_dsa(N, L, p, q, g, y, sign, msg1):
     :param msg1: Otrzymana wiadomość, dla której weryfikowany jest podpis (w bitach)
     :return: Informacja, czy podpis cyfrowy wiadomości jest poprawny
     """
-    if p >= pow(2, L) or p < pow(2, L - 1) or q >= pow(2, N) or q < pow(2, N - 1) or (
-            (p - 1) % q != 0) or g >= p or g <= 1:
-        raise Exception("Błędne parametry dla DSA!")
+    if p >= pow(2, L) or p < pow(2, L - 1):
+        raise Exception("Błędne parametry dla DSA! - Błędna długość p w bitach")
+    if q >= pow(2, N) or q < pow(2, N - 1):
+        raise Exception("Błędne parametry dla DSA - Błędna długość q w bitach")
+    if ((p - 1) % q != 0):
+        raise Exception("Błędne parametry dla DSA - q nie jest dzielnikiem p-1!")
+    if g >= p or g <= 1:
+        raise Exception("Błędne parametry dla DSA - Błędny generator grupy!")
+    if not (L == 1024 and N == 160) \
+            and not (L == 2048 and N == 224) and not (L == 2048 and N == 256) and not (L == 3072 and N == 256):
+        raise Exception("Błędne parametry dla DSA - Błędne parametry L,N!")
     if sign[0] >= q or sign[0] <= 0 or sign[1] <= 0 or sign[1] >= q:
         return False
     w = pow(sign[1], -1, q)

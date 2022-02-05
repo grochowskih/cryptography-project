@@ -25,9 +25,6 @@ binary_hex_conversion_table = {
     'F': '1111'
 }
 
-iv_start_table = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
 
 def hex_to_binary(s):
     """
@@ -53,46 +50,6 @@ def binary_to_hex(b):
     if len(hex_string) % 16 == 0:
         return hex_string
     return '0'*(16-(len(hex_string) % 16)) + hex_string
-
-
-
-def increment_bit(table, i):
-    """
-    Inkrementuje podany bit w tablicy. Jeśli element jest równy 2 to funkcja ustawia go na 0 i przechodzi wyżej
-    aż do rozmiaru tablicy.
-    :param table: Tablica reprezentująca tekst w systemie dwójkowym.
-    :param i: Element tabeli który inkrementujemy.
-    :return: Tablica reprezentująca liczbę w systemie dwójkowym powiększoną o 1.
-    """
-    table[i] += 1
-    if table[i] == 2 & i == 0:
-        return [0] * len(table)
-    if(table[i]) == 2:
-        table[i] = 0
-        return increment_bit(table, i-1)
-    return table
-
-
-def increment_iv(table):
-    # https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
-    # Zrobiliśmy counter który po osiągnieciu maksymalnej długości wraca do 0
-    """
-    Inkrementujemy liczbę.
-    :return: IV powiększone o 1.
-    """
-    str_table = ""
-    table = increment_bit(table, len(table) - 1)
-    for i in range(0, len(table)):
-        str_table += str(table[i])
-    return binary_to_hex(str_table)
-
-
-def generate_iv():
-    # https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
-    """
-    :return: Wektor inicjalizujący.
-    """
-    return increment_iv(iv_start_table)
 
 
 def ofb_encrypt(plaintext, key1, key2, key3, iv):

@@ -1,6 +1,49 @@
 import random
 
 
+iv_start_table = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+
+def increment_bit(table, i):
+    """
+    Inkrementuje podany bit w tablicy. Jeśli element jest równy 2 to funkcja ustawia go na 0 i przechodzi wyżej
+    aż do rozmiaru tablicy.
+    :param table: Tablica reprezentująca tekst w systemie dwójkowym.
+    :param i: Element tabeli który inkrementujemy.
+    :return: Tablica reprezentująca liczbę w systemie dwójkowym powiększoną o 1.
+    """
+    table[i] += 1
+    if table[i] == 2 & i == 0:
+        return [0] * len(table)
+    if(table[i]) == 2:
+        table[i] = 0
+        return increment_bit(table, i-1)
+    return table
+
+
+def increment_iv(table):
+    # https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
+    # Zrobiliśmy counter który po osiągnieciu maksymalnej długości wraca do 0
+    """
+    Inkrementujemy liczbę.
+    :return: IV powiększone o 1.
+    """
+    str_table = ""
+    table = increment_bit(table, len(table) - 1)
+    for i in range(0, len(table)):
+        str_table += str(table[i])
+    return binary_to_hex(str_table)
+
+
+def generate_iv():
+    # https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
+    """
+    :return: Wektor inicjalizujący.
+    """
+    return increment_iv(iv_start_table)
+
+
 def group_generator(p, q):
     """
     Funkcja wyznaczająca generator podgrupy multiplikatywnej potrzebny do algorytmu DSA.

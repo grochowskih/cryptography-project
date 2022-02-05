@@ -15,7 +15,7 @@ def generate_dsa(N, L, p, q, g, x, k, msg, ks):
     :param k: Parametr przyporządkowany do wiadomości
     :param msg: Wiadomość, dla której obliczamy podpis cyfrowy (w bitach)
     :param ks: Użyte wartości k, gdyż mają być unikalne
-    :return: Podpis cyfrowy wiadomości msg przechowywany jako lista dwuelementowa
+    :return: Podpis cyfrowy wiadomości msg przechowywany jako lista dwuelementowa liczb całkowitych
     """
     if p >= pow(2, L) or p < pow(2, L - 1):
         raise Exception("Błędne parametry dla DSA! - Błędna długość p w bitach")

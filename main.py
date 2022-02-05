@@ -13,39 +13,45 @@ if __name__ == "__main__":
             choice = input(
                 "Czy chcesz podać własne parametry do algorytmu DSA, czy chcesz, aby zostałe wylosowane? Wciśnij A, jeśli własne, B, jeśli przykładowe, cokolwiek innego, jeśli losowe: ")
             if choice == "A":
-                print("Parametry podawaj jako liczby całkowite.")
+                print("Parametry (Poza N, L - te jako całkowitoliczbowe) podawaj jako liczby w systemie szesnastkowym.")
                 try:
                     N = int(input("Podaj parametr N: "))
                     L = int(input("Podaj parametr L: "))
-                    p = int(input("Podaj parametr p: "))
-                    q = int(input("Podaj parametr q: "))
-                    g = int(input("Podaj parametr g: "))
-                    x = int(input("Podaj parametr x: "))
-                    k = int(input("Podaj parametr k: "))
+                    p_hex = input("Podaj parametr p: ")
+                    q_hex = input("Podaj parametr q: ")
+                    g_hex = input("Podaj parametr g: ")
+                    x_hex = input("Podaj parametr x: ")
+                    k_hex = input("Podaj parametr k: ")
+                    p, q, g, x, k = int(p_hex, 16), int(q_hex, 16), int(g_hex, 16), int(x_hex, 16), int(k_hex, 16)
                 except:
                     print("Błędny format wejścia.")
             elif choice == "B":
                 print("Domyślne parametry to L = 1024, N = 160 (dopuszczalne przez NIST)")
                 L = 1024
                 N = 160
-                p = int("86F5CA03DCFEB225063FF830A0C769B9DD9D6153AD91D7CE27F787C43278B447E6533B86B18BED6E8A48B784A14C252C5BE0DBF60B86D6385BD2F12FB763ED8873ABFD3F5BA2E0A8C0A59082EAC056935E529DAF7C610467899C77ADEDFC846C881870B7B19B2B58F9BE0521A17002E3BDD6B86685EE90B3D9A1B02B782B1779", 16)
-                q = int("996F967F6C8E388D9E28D01E205FBA957A5698B1", 16)
-                g = int("07B0F92546150B62514BB771E2A0C0CE387F03BDA6C56B505209FF25FD3C133D89BBCD97E904E09114D9A7DEFDEADFC9078EA544D2E401AEECC40BB9FBBF78FD87995A10A1C27CB7789B594BA7EFB5C4326A9FE59A070E136DB77175464ADCA417BE5DCE2F40D10A46A3A3943F26AB7FD9C0398FF8C76EE0A56826A8A88F1DBD", 16)
-                x = int("411602CB19A6CCC34494D79D98EF1E7ED5AF25F7", 16)
-                k = int("95897CD7BBB944AA932DBC579C1C09EB6FCFC595", 16)
+                p_hex = "86F5CA03DCFEB225063FF830A0C769B9DD9D6153AD91D7CE27F787C43278B447E6533B86B18BED6E8A48B784A14C252C5BE0DBF60B86D6385BD2F12FB763ED8873ABFD3F5BA2E0A8C0A59082EAC056935E529DAF7C610467899C77ADEDFC846C881870B7B19B2B58F9BE0521A17002E3BDD6B86685EE90B3D9A1B02B782B1779"
+                q_hex = "996F967F6C8E388D9E28D01E205FBA957A5698B1"
+                g_hex = "07B0F92546150B62514BB771E2A0C0CE387F03BDA6C56B505209FF25FD3C133D89BBCD97E904E09114D9A7DEFDEADFC9078EA544D2E401AEECC40BB9FBBF78FD87995A10A1C27CB7789B594BA7EFB5C4326A9FE59A070E136DB77175464ADCA417BE5DCE2F40D10A46A3A3943F26AB7FD9C0398FF8C76EE0A56826A8A88F1DBD"
+                x_hex = "411602CB19A6CCC34494D79D98EF1E7ED5AF25F7"
+                k_hex = "95897CD7BBB944AA932DBC579C1C09EB6FCFC595"
+                p, q, g, x, k = p_hex, q_hex, g_hex, x_hex, k_hex
             else:
                 print("Domyślne parametry to L = 1024, N = 160 (dopuszczalne przez NIST)")
                 params = generators.generator.generate_primes_length_dsa()
                 L = params[0]
                 N = params[1]
-                p = int(params[2], 16)
-                q = int(params[3], 16)
+                p_hex = params[2]
+                q_hex = params[3], 16
                 g = generators.generator.group_generator(p, q)
+                g_hex = hex(g)[2:]
                 x = random.randrange(1, q)
+                x_hex = hex(x)[2:]
                 k = random.randrange(1, q) # Generowanie parametrów x,k wymagałoby zapoznawania się z kolejnymi standardami
-            print("Wybrane parametry to: ")
+                k_hex = hex(k)[2:]
+            print("Wybrane parametry to (w szesnastkowym z wyjątkiem N,L): ")
             y = pow(g, x, p)
-            print("L = ", L,"\nN = ", N,"\np = ", p,"\nq = ", q,"\ng = ", g,"\nx = ", x,"\nk = ", k,"\ny = ", y)
+            y_hex = hex(y)[2:]
+            print("L = ", L,"\nN = ", N,"\np = ", p_hex,"\nq = ", q_hex,"\ng = ", g_hex,"\nx = ", x_hex,"\nk = ", k_hex,"\ny = ", y_hex)
             msg_text = input("Podaj wiadomość (tekst), dla której chcesz obliczyć podpis cyfrowy: ")
             msg_bin = bin(int(msg_text.encode("utf-8").hex(), 16))[2:] # Wiadomość binarnie, bo tak przyjmuje nasze DSA
             try:
@@ -55,22 +61,23 @@ if __name__ == "__main__":
                 print("Przechwycono wyjątek!")
                 print(ex)
         elif action == "B":
-            print("Podaj parametry do weryfikacji podpisu (jako liczby całkowite)")
+            print("Podaj parametry do weryfikacji podpisu. " + "Parametry (Poza N, L, r, s - te jako int) podawaj jako liczby w systemie szesnastkowym.")
             try:
                 N = int(input("Podaj parametr N: "))
                 L = int(input("Podaj parametr L: "))
-                p = int(input("Podaj parametr p: "))
-                q = int(input("Podaj parametr q: "))
-                g = int(input("Podaj parametr g: "))
-                y = int(input("Podaj parametr y: "))
+                p_hex = input("Podaj parametr p: ")
+                q_hex = input("Podaj parametr q: ")
+                g_hex = input("Podaj parametr g: ")
+                y_hex = int(input("Podaj parametr y: "))
                 r = int(input("Podaj parametr r (pierwsza pozycja podpisu): "))
                 s = int(input("Podaj parametr s (druga pozycja podpisu): "))
+                p, q, g, y = int(p_hex, 16), int(q_hex, 16), int(g_hex, 16), int(y_hex, 16)
             except:
                 print("Błędny format podano!")
             msg_text = input("Podaj wiadomość (tekst), dla której chcesz zweryfikować podpis cyfrowy: ")
             msg_bin = bin(int(msg_text.encode("utf-8").hex(), 16))[2:]  # Wiadomość binarnie, bo tak przyjmuje nasze DSA
             try:
-                correct = DSA.dsa.verify_dsa(N, L, p, q, g, y, [r,s], msg_bin)
+                correct = DSA.dsa.verify_dsa(N, L, p, q, g, y, [r, s], msg_bin)
                 print("Czy podpis jest poprawny? ", correct)
             except Exception as ex:
                 print(ex)

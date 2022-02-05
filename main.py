@@ -164,9 +164,9 @@ if __name__ == "__main__":
                 print("Oto Twoja zaszyfrowana wiadomość: ", TDES.OFB.ofb_encrypt(plaintext,key1,key2,key3,Iv))
 
             else:
-                key1 = generators.generator.generate_iv()
-                key2 = generators.generator.generate_iv()
-                key3 = generators.generator.generate_iv()
+                key1 = generators.generator.generate_key()
+                key2 = generators.generator.generate_key()
+                key3 = generators.generator.generate_key()
                 Iv = generators.generator.generate_iv()
                 if choice2 != '1':
                     plaintext = plaintext.encode("utf-8").hex()
@@ -268,9 +268,9 @@ if __name__ == "__main__":
                 print("Oto Twoja odszyfrowana wiadomość: ", TDES.OFB.ofb_decrypt(ciphertext, key1, key2, key3, Iv))
 
             else:
-                key1 = generators.generator.generate_iv()
-                key2 = generators.generator.generate_iv()
-                key3 = generators.generator.generate_iv()
+                key1 = generators.generator.generate_key()
+                key2 = generators.generator.generate_key()
+                key3 = generators.generator.generate_key()
                 Iv = generators.generator.generate_iv()
                 if choice2 != '1':
                     ciphertext = ciphertext.encode("utf-8").hex()

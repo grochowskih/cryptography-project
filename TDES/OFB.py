@@ -128,7 +128,6 @@ def ofb_encrypt(plaintext, key1, key2, key3, iv):
     for i in range(0, len(blocks)):
         enc_hex.append(binary_to_hex(encrypted_blocks[i]))
 
-    print(''.join(enc_hex))
     return ''.join(enc_hex)
 
 
@@ -146,12 +145,12 @@ def ofb_decrypt(ciphertext, key1, key2, key3, iv):
 # https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/TDES_OFB.pdf
 # Szyfrowanie:
 # Przykład 1:
-# plaintext: 6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E51
-# key1: 0123456789ABCDEF
-# key2: 23456789ABCDEF01
-# key3: 456789ABCDEF0123
-# iv: F69F2445DF4F9B17
-# ofb_encrypt(plaintext, key1, key2, key3, iv) = 6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E51
+# plaintext = "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E51"
+# key1 = "0123456789ABCDEF"
+# key2 = "23456789ABCDEF01"
+# key3 = "456789ABCDEF0123"
+# iv = "F69F2445DF4F9B17"
+# print(ofb_encrypt(plaintext, key1, key2, key3, iv)) #= 078BB74E59CE7ED6267E120692667DA1A58662D7E04CBC642144D55C03DB5AEE
 # Przykład 2:
 # plaintext: 6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E51
 # key1: 0123456789ABCDEF

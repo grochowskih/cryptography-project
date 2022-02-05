@@ -1,9 +1,20 @@
 import random
-
+from TDES.OFB import binary_to_hex
 
 iv_start_table = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
+def generate_key():
+    """
+    Generuje klucz 64-bitowy zapisany w systemie szesnastkowym. Do generowania potrzebna jest źródło losowości.
+    Na podstawie: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-67r2.pdf
+    :return: Wygenerowany klucz
+    """
+    key = ""
+    for i in range(64):
+        temp = str(random.randint(0, 1))
+        key += temp
+    return TDES.OFB.binary_to_hex(key)
 
 def increment_bit(table, i):
     """

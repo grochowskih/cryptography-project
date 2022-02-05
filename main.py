@@ -79,8 +79,10 @@ if __name__ == "__main__":
             choice2 = input("Jeśli twój tekst jest już w systemie szesnastkowym, wciśnij 1. Jeśli nie, wciśnij "
                             "cokolwiek innego: ")
             choice1 = input("Jeśli chcesz sam podać klucze i wektor inicjalizujący, wciśnij 1. Jeśli nie, wciśnij "
-                            "cokolwiek innggo: ")
+                            "cokolwiek innego: ")
             if choice1 == '1':
+                choice3 = input("Jeśli twoje klucze i wektor inicjalizujący są w systemie szesnastkowym, wcisnij 1. "
+                                "Jeśli nie, wciśnij cokolwiek innego: ")
                 Iv = input("Podaj wektor inicjalizujący: ")
                 while len(TDES.OFB.hex_to_binary(Iv.encode("utf-8").hex())) != 64:
                     Iv = input("Zła długość wektora inicjalizującego. Podaj nowy wektor inicjalizujący: ")
@@ -130,10 +132,11 @@ if __name__ == "__main__":
                         key1 = input("Zła długość klucza. Podaj nowy klucz: ")
                     key2 = key1
                     key3 = key1
-                key1 = key1.encode("utf-8").hex()
-                key2 = key2.encode("utf-8").hex()
-                key3 = key3.encode("utf-8").hex()
-                Iv = Iv.encode("utf-8").hex()
+                if choice3 != '1':
+                    key1 = key1.encode("utf-8").hex()
+                    key2 = key2.encode("utf-8").hex()
+                    key3 = key3.encode("utf-8").hex()
+                    Iv = Iv.encode("utf-8").hex()
                 if choice2 != '1':
                     plaintext = plaintext.encode("utf-8").hex()
                 print("Oto Twoja zaszyfrowana wiadomość: ", TDES.OFB.ofb_encrypt(plaintext,key1,key2,key3,Iv))
@@ -143,7 +146,9 @@ if __name__ == "__main__":
                 key2 = TDES.OFB.generate_iv()
                 key3 = TDES.OFB.generate_iv()
                 Iv = TDES.OFB.generate_iv()
-                plaintext = plaintext.encode("utf-8").hex()
+                if choice2 != '1':
+                    plaintext = plaintext.encode("utf-8").hex()
+                print("Twój Iv, pierwszy klucz, drugi klucz, trzeci klucz: ", Iv, key1, key2, key3)
                 print("Oto Twoja zaszyfrowana wiadomość: ", TDES.OFB.ofb_encrypt(plaintext, key1, key2, key3, Iv))
 
         elif action == "D":
@@ -153,6 +158,8 @@ if __name__ == "__main__":
             choice1 = input("Jeśli chcesz sam podać klucze i wektor inicjalizujący, wciśnij 1. Jeśli nie, wciśnij "
                             "cokolwiek innggo: ")
             if choice1 == '1':
+                choice3 = input("Jeśli twoje klucze i wektor inicjalizujący są w systemie szesnastkowym, wcisnij 1. "
+                                "Jeśli nie, wciśnij cokolwiek innego: ")
                 Iv = input("Podaj wektor inicjalizujący 64-bitowy: ")
                 while len(TDES.OFB.hex_to_binary(Iv.encode("utf-8").hex())) != 64:
                     Iv = input("Zła długość wektora inicjalizującego. Podaj nowy wektor inicjalizujący: ")
@@ -203,10 +210,12 @@ if __name__ == "__main__":
                         key1 = input("Zła długość klucza. Podaj nowy klucz: ")
                     key2 = key1
                     key3 = key1
-                key1 = key1.encode("utf-8").hex()
-                key2 = key2.encode("utf-8").hex()
-                key3 = key3.encode("utf-8").hex()
-                Iv = Iv.encode("utf-8").hex()
+
+                if choice3 != '1':
+                    key1 = key1.encode("utf-8").hex()
+                    key2 = key2.encode("utf-8").hex()
+                    key3 = key3.encode("utf-8").hex()
+                    Iv = Iv.encode("utf-8").hex()
                 if choice2 != '1':
                     ciphertext = ciphertext.encode("utf-8").hex()
                 print("Oto Twoja odszyfrowana wiadomość: ", TDES.OFB.ofb_decrypt(ciphertext, key1, key2, key3, Iv))
@@ -218,8 +227,5 @@ if __name__ == "__main__":
                 Iv = TDES.OFB.generate_iv()
                 if choice2 != '1':
                     ciphertext = ciphertext.encode("utf-8").hex()
+                print("Twój Iv, pierwszy klucz, drugi klucz, trzeci klucz: ", Iv, key1, key2, key3)
                 print("Oto Twoja odszyfrowana wiadomość: ", TDES.OFB.ofb_decrypt(ciphertext, key1, key2, key3, Iv))
-
-
-
-

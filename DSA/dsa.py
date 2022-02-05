@@ -45,7 +45,7 @@ def generate_dsa(N, L, p, q, g, x, k, msg, ks):
         s = (pow(k, -1, q) * (dig + x * r)) % q  # Obliczamy wartość
 
     ks.append(k) # To k było już wykorzystane
-    return [r, s]  # W standardzie jest przechowywany wynik jako tuple, przechowujemy jako lista
+    return [r, s]  # W standardzie jest przechowywany wynik jako tuple, przechowujemy jako lista integerów
 
 
 def verify_dsa(N, L, p, q, g, y, sign, msg1):
@@ -77,8 +77,8 @@ def verify_dsa(N, L, p, q, g, y, sign, msg1):
         return False
     w = pow(sign[1], -1, q)
     sha_dig = SHA.sha384.sha384(msg1)
-    n = min([N, len(sha_dig)])
-    dig = int(sha_dig[:n], 2)
+    n = min([N, len(sha_dig)]) # krótsza z wartości, tak jak w standardzie
+    dig = int(sha_dig[:n], 2) # wzięcie n pierwszych eltów, tak jak w standardzie
     u_1 = int((dig * w) % q)
     u_2 = int((sign[0] * w) % q)
     ver = ((pow(g, u_1, p) * pow(y, u_2, p)) % p) % q

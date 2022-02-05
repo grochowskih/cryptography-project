@@ -1,4 +1,4 @@
-from DES_code import TripleDesEncrypt
+from TDES.DES_code import TripleDesEncrypt
 
 binary_hex_conversion_table = {
     '0': '0000',

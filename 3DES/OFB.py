@@ -83,7 +83,7 @@ def increment_iv(table):
 def generate_iv():
     # https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
     """
-    :return: Wektor inicjalizujący lb bitowy.
+    :return: Wektor inicjalizujący.
     """
     return increment_iv(iv_start_table)
 

@@ -11,9 +11,19 @@ def generate_key():
     :return: Wygenerowany klucz
     """
     key = ""
+    k = 0
     for i in range(64):
-        temp = str(random.randint(0, 1))
-        key += temp
+        temp = random.randint(0, 1)
+        if i not in range(7,64,8):
+            key += str(temp)
+            k += temp
+
+        else:
+            if k % 2 == 1:
+                key += str(0)
+            else:
+                key += str(1)
+            k = 0
     return TDES.OFB.binary_to_hex(key)
 
 def increment_bit(table, i):

@@ -25,6 +25,9 @@ binary_hex_conversion_table = {
     'F': '1111'
 }
 
+iv_start_table = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
 
 def hex_to_binary(s):
     """
@@ -32,6 +35,7 @@ def hex_to_binary(s):
     :param s: Tekst w systemie szesnastkowym.
     :return: Tekst w systemie binarnym.
     """
+
     binary_string = ""
     for character in s:
         binary_string += binary_hex_conversion_table[character]
@@ -49,7 +53,45 @@ def binary_to_hex(b):
     return hex_string
 
 
+def increment_bit(table, i):
+    """
+    Inkrementuje podany bit w tablicy. Jeśli element jest równy 2 to funkcja ustawia go na 0 i przechodzi wyżej
+    aż do rozmiaru tablicy.
+    :param table: Tablica reprezentująca tekst w systemie dwójkowym.
+    :param i: Element tabeli który inkrementujemy.
+    :return: Tablica reprezentująca liczbę w systemie dwójkowym powiększoną o 1.
+    """
+    table[i] += 1
+    if table[i] == 2 & i == 0:
+        return [0] * len(table)
+    if(table[i]) == 2:
+        table[i] = 0
+        return increment_bit(table, i-1)
+    return table
+
+
+def increment_iv(table):
+    # https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
+    # Zrobiliśmy counter który po osiągnieciu maksymalnej długości wraca do 0
+    """
+    Inkrementujemy liczbę.
+    :return: IV powiększone o 1.
+    """
+    return binary_to_hex(''.join(map(str, increment_bit(table, len(table)-1))))
+
+
+def generate_iv():
+    # https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
+    """
+    :return: Wektor inicjalizujący lb bitowy.
+    """
+    return increment_iv(iv_start_table)
+
+
 def ofb_encrypt(plaintext, key1, key2, key3, iv):
+    # https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
+    # IV wybiera użytkownik lub generator, generator inkrementuje iv więc jest ono za każdym razem inne.
+    # Standard mówi, że IV musi być nonce, u nas jest o ile tworzy je generator, użytkownik może wpisać cokolwiek
     """
     Funkcja szyfruje podany tekst, przy pomocy podanego klucza oraz iv.
     :param plaintext: Tekst który chcemy zaszyfrować w systemie szesnastkowym.
@@ -84,6 +126,7 @@ def ofb_encrypt(plaintext, key1, key2, key3, iv):
 
 
 def ofb_decrypt(ciphertext, key1, key2, key3, iv):
+    # https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
     """
     Funkcja deszyfruje podany tekst, przy pomocy podanego klucza oraz iv.
     :param ciphertext: Szyfr który chcemy odszyfrować w systemie szesnastkowym.

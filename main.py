@@ -84,8 +84,12 @@ if __name__ == "__main__":
                 choice3 = input("Jeśli twoje klucze i wektor inicjalizujący są w systemie szesnastkowym, wcisnij 1. "
                                 "Jeśli nie, wciśnij cokolwiek innego: ")
                 Iv = input("Podaj wektor inicjalizujący: ")
-                while len(TDES.OFB.hex_to_binary(Iv.encode("utf-8").hex())) != 64:
-                    Iv = input("Zła długość wektora inicjalizującego. Podaj nowy wektor inicjalizujący: ")
+                if choice3 != '1':
+                    while len(TDES.OFB.hex_to_binary(Iv.encode("utf-8").hex())) != 64:
+                        Iv = input("Zła długość wektora inicjalizującego. Podaj nowy wektor inicjalizujący: ")
+                else:
+                    while len(TDES.OFB.hex_to_binary(Iv)) != 64:
+                        Iv = input("Zła długość wektora inicjalizującego. Podaj nowy wektor inicjalizujący: ")
                 print("Wybierz opcję kluczy. \n 1. Wszystkie klucze są różne i od siebie niezależne. "
                       "\n 2. Klucz pierwszy i klucz drugi są od siebie niezależne oraz klucz pierwszy jest taki sam jak klucz"
                       "trzeci. \n 3. Wszystkie klucze są takie same (TDES trywializuje się do DES)")
@@ -101,13 +105,22 @@ if __name__ == "__main__":
                         key2 = input("Podaj drugi klucz: ")
                         key3 = input("Podaj trzeci klucz: ")
 
-                    while len(TDES.OFB.hex_to_binary(key1.encode("utf-8").hex())) != 64 or \
-                          len(TDES.OFB.hex_to_binary(key2.encode("utf-8").hex())) != 64 or \
-                          len(TDES.OFB.hex_to_binary(key3.encode("utf-8").hex())) != 64:
-                        print("Długość kluczy jest zła.")
-                        key1 = input("Podaj pierwszy klucz: ")
-                        key2 = input("Podaj drugi klucz: ")
-                        key3 = input("Podaj trzeci klucz: ")
+                    if choice3 != '1':
+                        while len(TDES.OFB.hex_to_binary(key1.encode("utf-8").hex())) != 64 or \
+                              len(TDES.OFB.hex_to_binary(key2.encode("utf-8").hex())) != 64 or \
+                              len(TDES.OFB.hex_to_binary(key3.encode("utf-8").hex())) != 64:
+                            print("Długość kluczy jest zła.")
+                            key1 = input("Podaj pierwszy klucz: ")
+                            key2 = input("Podaj drugi klucz: ")
+                            key3 = input("Podaj trzeci klucz: ")
+                    else:
+                        while len(TDES.OFB.hex_to_binary(key1)) != 64 or \
+                              len(TDES.OFB.hex_to_binary(key2)) != 64 or \
+                              len(TDES.OFB.hex_to_binary(key3)) != 64:
+                            print("Długość kluczy jest zła.")
+                            key1 = input("Podaj pierwszy klucz: ")
+                            key2 = input("Podaj drugi klucz: ")
+                            key3 = input("Podaj trzeci klucz: ")
 
                 elif choice == "2":
                     key1 = input("Podaj pierwszy klucz: ")
@@ -117,19 +130,28 @@ if __name__ == "__main__":
                         print("Klucze się powtarzają. Wybierz nowe klucze.")
                         key1 = input("Podaj pierwszy klucz: ")
                         key2 = input("Podaj drugi klucz: ")
-
-                    while len(TDES.OFB.hex_to_binary(key1.encode("utf-8").hex())) != 64 or \
-                          len(TDES.OFB.hex_to_binary(key2.encode("utf-8").hex())) != 64:
-                        print("Długość kluczy jest zła.")
-                        key1 = input("Podaj pierwszy klucz: ")
-                        key2 = input("Podaj drugi klucz: ")
+                    if choice3 != '1':
+                        while len(TDES.OFB.hex_to_binary(key1.encode("utf-8").hex())) != 64 or \
+                              len(TDES.OFB.hex_to_binary(key2.encode("utf-8").hex())) != 64:
+                            print("Długość kluczy jest zła.")
+                            key1 = input("Podaj pierwszy klucz: ")
+                            key2 = input("Podaj drugi klucz: ")
+                    else:
+                        while len(TDES.OFB.hex_to_binary(key1)) != 64 or \
+                              len(TDES.OFB.hex_to_binary(key2)) != 64:
+                            print("Długość kluczy jest zła.")
+                            key1 = input("Podaj pierwszy klucz: ")
+                            key2 = input("Podaj drugi klucz: ")
                     key3 = key1
 
                 elif choice == "3":
                     key1 = input("Podaj klucz: ")
-
-                    while len(TDES.OFB.hex_to_binary(key1.encode("utf-8").hex())) != 64:
-                        key1 = input("Zła długość klucza. Podaj nowy klucz: ")
+                    if choice3 != '1':
+                        while len(TDES.OFB.hex_to_binary(key1.encode("utf-8").hex())) != 64:
+                            key1 = input("Zła długość klucza. Podaj nowy klucz: ")
+                    else:
+                        while len(TDES.OFB.hex_to_binary(key1)) != 64:
+                            key1 = input("Zła długość klucza. Podaj nowy klucz: ")
                     key2 = key1
                     key3 = key1
                 if choice3 != '1':
@@ -161,8 +183,12 @@ if __name__ == "__main__":
                 choice3 = input("Jeśli twoje klucze i wektor inicjalizujący są w systemie szesnastkowym, wcisnij 1. "
                                 "Jeśli nie, wciśnij cokolwiek innego: ")
                 Iv = input("Podaj wektor inicjalizujący 64-bitowy: ")
-                while len(TDES.OFB.hex_to_binary(Iv.encode("utf-8").hex())) != 64:
-                    Iv = input("Zła długość wektora inicjalizującego. Podaj nowy wektor inicjalizujący: ")
+                if choice3 != '1':
+                    while len(TDES.OFB.hex_to_binary(Iv.encode("utf-8").hex())) != 64:
+                        Iv = input("Zła długość wektora inicjalizującego. Podaj nowy wektor inicjalizujący: ")
+                else:
+                    while len(TDES.OFB.hex_to_binary(Iv)) != 64:
+                        Iv = input("Zła długość wektora inicjalizującego. Podaj nowy wektor inicjalizujący: ")
                 print("Wybierz opcję kluczy. Niezależnie od wyboru, klucze muszą być 64-bitowe."
                       " \n 1. Wszystkie klucze są różne i od siebie niezależne. "
                       "\n 2. Klucz pierwszy i klucz drugi są od siebie niezależne oraz klucz pierwszy jest taki sam "
@@ -179,13 +205,23 @@ if __name__ == "__main__":
                         key2 = input("Podaj drugi klucz: ")
                         key3 = input("Podaj trzeci klucz: ")
 
-                    while len(TDES.OFB.hex_to_binary(key1.encode("utf-8").hex())) != 64 or \
-                            len(TDES.OFB.hex_to_binary(key2.encode("utf-8").hex())) != 64 or \
-                            len(TDES.OFB.hex_to_binary(key3.encode("utf-8").hex())) != 64:
-                        print("Długość kluczy jest zła.")
-                        key1 = input("Podaj pierwszy klucz: ")
-                        key2 = input("Podaj drugi klucz: ")
-                        key3 = input("Podaj trzeci klucz: ")
+                    if choice3 != '1':
+                        while len(TDES.OFB.hex_to_binary(key1.encode("utf-8").hex())) != 64 or \
+                              len(TDES.OFB.hex_to_binary(key2.encode("utf-8").hex())) != 64 or \
+                              len(TDES.OFB.hex_to_binary(key3.encode("utf-8").hex())) != 64:
+                            print("Długość kluczy jest zła.")
+                            key1 = input("Podaj pierwszy klucz: ")
+                            key2 = input("Podaj drugi klucz: ")
+                            key3 = input("Podaj trzeci klucz: ")
+                    else:
+                        while len(TDES.OFB.hex_to_binary(key1)) != 64 or \
+                              len(TDES.OFB.hex_to_binary(key2)) != 64 or \
+                              len(TDES.OFB.hex_to_binary(key3)) != 64:
+                            print("Długość kluczy jest zła.")
+                            key1 = input("Podaj pierwszy klucz: ")
+                            key2 = input("Podaj drugi klucz: ")
+                            key3 = input("Podaj trzeci klucz: ")
+
 
                 elif choice == "2":
                     key1 = input("Podaj pierwszy klucz: ")
@@ -196,18 +232,29 @@ if __name__ == "__main__":
                         key1 = input("Podaj pierwszy klucz: ")
                         key2 = input("Podaj drugi klucz: ")
 
-                    while len(TDES.OFB.hex_to_binary(key1.encode("utf-8").hex())) != 64 or \
-                            len(TDES.OFB.hex_to_binary(key2.encode("utf-8").hex())) != 64:
-                        print("Długość kluczy jest zła.")
-                        key1 = input("Podaj pierwszy klucz: ")
-                        key2 = input("Podaj drugi klucz: ")
+                    if choice3 != '1':
+                        while len(TDES.OFB.hex_to_binary(key1.encode("utf-8").hex())) != 64 or \
+                                len(TDES.OFB.hex_to_binary(key2.encode("utf-8").hex())) != 64:
+                            print("Długość kluczy jest zła.")
+                            key1 = input("Podaj pierwszy klucz: ")
+                            key2 = input("Podaj drugi klucz: ")
+                    else:
+                        while len(TDES.OFB.hex_to_binary(key1)) != 64 or \
+                                len(TDES.OFB.hex_to_binary(key2)) != 64:
+                            print("Długość kluczy jest zła.")
+                            key1 = input("Podaj pierwszy klucz: ")
+                            key2 = input("Podaj drugi klucz: ")
                     key3 = key1
 
                 elif choice == "3":
                     key1 = input("Podaj klucz: ")
 
-                    while len(TDES.OFB.hex_to_binary(key1.encode("utf-8").hex())) != 64:
-                        key1 = input("Zła długość klucza. Podaj nowy klucz: ")
+                    if choice3 != '1':
+                        while len(TDES.OFB.hex_to_binary(key1.encode("utf-8").hex())) != 64:
+                            key1 = input("Zła długość klucza. Podaj nowy klucz: ")
+                    else:
+                        while len(TDES.OFB.hex_to_binary(key1)) != 64:
+                            key1 = input("Zła długość klucza. Podaj nowy klucz: ")
                     key2 = key1
                     key3 = key1
 

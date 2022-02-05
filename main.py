@@ -35,10 +35,11 @@ if __name__ == "__main__":
                 k = int("95897CD7BBB944AA932DBC579C1C09EB6FCFC595", 16)
             else:
                 print("Domyślne parametry to L = 1024, N = 160 (dopuszczalne przez NIST)")
-                L = 1024
-                N = 160
-                p = int("86F5CA03DCFEB225063FF830A0C769B9DD9D6153AD91D7CE27F787C43278B447E6533B86B18BED6E8A48B784A14C252C5BE0DBF60B86D6385BD2F12FB763ED8873ABFD3F5BA2E0A8C0A59082EAC056935E529DAF7C610467899C77ADEDFC846C881870B7B19B2B58F9BE0521A17002E3BDD6B86685EE90B3D9A1B02B782B1779",16)
-                q = int("996F967F6C8E388D9E28D01E205FBA957A5698B1", 16)
+                params = generators.generator.generate_primes_length_dsa()
+                L = params[0]
+                N = params[1]
+                p = int(params[2], 16)
+                q = int(params[3], 16)
                 g = generators.generator.group_generator(p, q)
                 x = random.randrange(1, q)
                 k = random.randrange(1, q) # Generowanie parametrów x,k wymagałoby zapoznawania się z kolejnymi standardami

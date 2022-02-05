@@ -50,7 +50,10 @@ def binary_to_hex(b):
     """
     hex_string = format(int(b, 2), 'x')
     hex_string.rjust(4, '0')
-    return hex_string
+    if len(hex_string) % 16 == 0:
+        return hex_string
+    return '0'*(16-(len(hex_string) % 16)) + hex_string
+
 
 
 def increment_bit(table, i):
@@ -77,7 +80,11 @@ def increment_iv(table):
     Inkrementujemy liczbę.
     :return: IV powiększone o 1.
     """
-    return binary_to_hex(''.join(map(str, increment_bit(table, len(table)-1))))
+    str_table = ""
+    table = increment_bit(table, len(table) - 1)
+    for i in range(0, len(table)):
+        str_table += str(table[i])
+    return binary_to_hex(str_table)
 
 
 def generate_iv():

@@ -71,10 +71,13 @@ if __name__ == "__main__":
             try:
                 correct = DSA.dsa.verify_dsa(N, L, p, q, g, y, [r,s], msg_bin)
                 print("Czy podpis jest poprawny? ", correct)
-            except:
+            except Exception as ex:
+                print(ex)
                 print("Przechwyciłem wyjątek!")
         elif action == "C":
             plaintext = input("Podaj tekst, który chcesz zaszyfrować: ")
+            choice2 = input("Jeśli twój tekst jest już w systemie szesnastkowym, wciśnij 1. Jeśli nie, wciśnij "
+                            "cokolwiek innego: ")
             choice1 = input("Jeśli chcesz sam podać klucze i wektor inicjalizujący, wciśnij 1. Jeśli nie, wciśnij "
                             "cokolwiek innggo: ")
             if choice1 == '1':
@@ -131,7 +134,8 @@ if __name__ == "__main__":
                 key2 = key2.encode("utf-8").hex()
                 key3 = key3.encode("utf-8").hex()
                 Iv = Iv.encode("utf-8").hex()
-                plaintext = plaintext.encode("utf-8").hex()
+                if choice2 != '1':
+                    plaintext = plaintext.encode("utf-8").hex()
                 print("Oto Twoja zaszyfrowana wiadomość: ", TDES.OFB.ofb_encrypt(plaintext,key1,key2,key3,Iv))
 
             else:

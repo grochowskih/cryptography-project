@@ -6,7 +6,7 @@ import TDES.OFB
 if __name__ == "__main__":
     used_ks = []
     while True:
-        print("----- 3DES OFB + DSA-SHA-384 -----")
+        print("----- TDES OFB + DSA-SHA-384 -----")
         print("A. Wygeneruj podpis cyfrowy \nB. Zweryfikuj podpis cyfrowy \nC. Zaszyfruj wiadomość \nD. Odszyfruj wiadomość ")
         action = input("Podaj opcję: ")
         if action == "A":

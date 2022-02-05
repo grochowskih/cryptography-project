@@ -193,25 +193,25 @@ def decrypt(block,key):
 
 def TripleDesEncrypt(block, key1, key2, key3):
     """
-    Funkcja szyfruje 64-bitowy blok tekstu algorytmem 3DES za pomocą trzech kluczy.
+    Funkcja szyfruje 64-bitowy blok tekstu algorytmem TDES za pomocą trzech kluczy.
     Na podstawie: https://csrc.nist.gov/csrc/media/publications/fips/46/3/archive/1999-10-25/documents/fips46-3.pdf
-    :param block: Blok tekstu, który chcemy zaszyfrować algorytmem 3DES.
+    :param block: Blok tekstu, który chcemy zaszyfrować algorytmem TDES.
     :param key1: Pierwszy klucz.
     :param key2: Drugi klucz.
     :param key3: Trzeci klucz.
-    :return: Tekst zaszyfrowany algorytmem 3DES.
+    :return: Tekst zaszyfrowany algorytmem TDES.
     """
     return encrypt(decrypt(encrypt(block,key1), key2),key3)
 
 def TripleDesDecrypt(block, key1, key2, key3):
     """
-    Funkcja odszyfrowuje 64-bitowy blok tekstu algorytmem 3DES za pomocą trzech kluczy.
+    Funkcja odszyfrowuje 64-bitowy blok tekstu algorytmem TDES za pomocą trzech kluczy.
     Na podstawie: https://csrc.nist.gov/csrc/media/publications/fips/46/3/archive/1999-10-25/documents/fips46-3.pdf
     :param block: Blok tekstu, który chcemy odszyfrować.
     :param key1: Pierwszy klucz.
     :param key2: Drugi Klucz.
     :param key3: Trzeci Klucz.
-    :return: Tekst odszyfrowany algorytmem 3DES.
+    :return: Tekst odszyfrowany algorytmem TDES.
     """
     return decrypt(encrypt(decrypt(block,key3),key2),key1)
 

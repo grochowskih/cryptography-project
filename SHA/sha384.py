@@ -128,7 +128,7 @@ def sha384_algorithm(msg):
     for block in msg_blocks:  # Dla każdego bloku po kolei
         iterator = iterator + 1  # Wzrost iteratora
         w_seq = [block[i*64:i*64+64] for i in
-                 range(int(1024 / 64))] # Słowa występujące w bloku to pierwszych 16 elementów ciągu
+                 range(int(1024 / 64))] # Wzięcie słów z bloku
         for k in range(16, 80):  # dla każdego k od 16 do 79
             w = '{0:064b}'.format(
                 (int(sigma_1(w_seq[k - 2])) + int(w_seq[k - 7], 2) + int(sigma_0(w_seq[k - 15])) + int(
@@ -139,10 +139,10 @@ def sha384_algorithm(msg):
         for k in range(0, 80):  # Dla każdego k od 0 do 79 włącznie
             t_1 = '{0:064b}'.format((int(a_seq[7], 2) + (rotr(a_seq[4], 14) ^ rotr(a_seq[4], 18) ^ rotr(a_seq[4], 41)) +
                                      CONST_VALUES[k] + ch(a_seq[4], a_seq[5], a_seq[6])
-                                     + int(w_seq[k], 2)) % pow(2, 64))
+                                     + int(w_seq[k], 2)) % pow(2, 64)) # Wartość parametru t1
             t_2 = '{0:064b}'.format(((rotr(a_seq[0], 28) ^ rotr(a_seq[0], 34) ^ rotr(a_seq[0], 39)) +
-                                     maj(a_seq[0], a_seq[1], a_seq[2])) % pow(2, 64))
-            a_seq[7] = a_seq[6]
+                                     maj(a_seq[0], a_seq[1], a_seq[2])) % pow(2, 64)) # Wartość parametru t2
+            a_seq[7] = a_seq[6] # Sekwencja podstawien - w standardzie jako a,b,c,d,e,f,g,h
             a_seq[6] = a_seq[5]
             a_seq[5] = a_seq[4]
             a_seq[4] = '{0:064b}'.format((int(a_seq[3], 2) + int(t_1, 2)) % pow(2, 64))
@@ -153,7 +153,7 @@ def sha384_algorithm(msg):
 
         new_h = ['{0:064b}'.format((int(a_seq[kk], 2) + int(h_seq[iterator - 1][kk], 2)) % pow(2, 64)) for kk in
                      range(8)]  # Wyliczenie H^i dla i-tego bloku
-        h_seq.append(new_h)  # Dodanie go do ciągu H
+        h_seq.append(new_h)  # Dodanie go (H^i) do ciągu H
 
     return h_seq[N][0] + h_seq[N][1] + h_seq[N][2] + h_seq[N][3] + h_seq[N][4] + h_seq[N][5]
 

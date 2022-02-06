@@ -9,7 +9,7 @@ Projekt z przedmiotu *Wprowadzenie do współczesnej kryptologii* wykonany przez
 **Uruchomienie aplikacji**
 
 
-Aplikacja jest napisana w języku Python 3.X. Sprawdzana była na systemie Windows.
+Aplikacja jest napisana w języku Python 3.10. Sprawdzana była na systemie Windows.
 Aby uruchomić program należy w wierszu poleceń przenieść się do katalogu
 z wypakowanym repozytorium, a następnie w konsoli podać:
 > python main.py
@@ -18,11 +18,11 @@ W przypadku, gdyby aplikacja nie działała problemem mogą być ściezki - pros
 
 **Testy**
 
-Przykłady danych, dla których był testowany algorytm DSA są dołączone w katalogu examples pod nazwą dsa-test-data.txt.
+Przykłady danych, dla których był testowany algorytm DSA są dołączone w katalogu *examples* pod nazwą *dsa-test-data.txt*.
 Są to dane rekomendowane do testów przez NIST i można znaleźć je pod adresem: https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program/digital-signatures. Testy dla tych danych wypadły pozytywnie.
 
-Przykłady danych, dla których odbyły się testu szyfru TDES w trybie OFB znajdują się w katalogu examples pod nazwą ....
-Są to dane rekomendowane do testów przez NIST i można znaleźć je pod adresem: ........
+Przykłady danych, dla których odbyły się testu szyfru TDES w trybie OFB znajdują się w katalogu *examples* pod nazwą *TDES-test-data.txt*.
+Są to dane rekomendowane do testów przez NIST i można znaleźć je pod adresem: https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/TDES_OFB.pdf. Testy dla tych danych wypadły pozytywnie.
 
 **Uwagi**
 

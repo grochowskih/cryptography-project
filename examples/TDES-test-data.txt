@@ -1,6 +1,6 @@
 3DES
 
-https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/TDES_Core.pdf
+https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/TDES_OFB.pdf
 Szyfrowanie:
 6BC1BEE22E409F96 = 0110101111000001101111101110001000101110010000001001111110010110
 block: 0110101111000001101111101110001000101110010000001001111110010110

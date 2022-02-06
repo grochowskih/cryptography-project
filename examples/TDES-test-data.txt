@@ -1,4 +1,4 @@
-3DES
+3DES_OFB
 Przykłady pochodzą z:
 https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/TDES_OFB.pdf
 

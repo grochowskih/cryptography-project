@@ -104,8 +104,7 @@ def pad_1024(msg):
         msg = "0" + msg
         length_msg = len(msg)
 
-    length_msg_moduli = length_msg % 1024
-    k = (896 - 1 - length_msg_moduli) % 1024  # Rozwiązanie liniowej kongruencji występującej w paddingu
+    k = (896 - 1 - length_msg) % 1024  # Rozwiązanie liniowej kongruencji występującej w paddingu
 
     length_bin = '{0:0128b}'.format(length_msg)  # Długość wiadomości zapisana za pomocą bitów długości 128
 
@@ -119,9 +118,8 @@ def sha384_algorithm(msg):
     :param msg: Uzupełniona wiadomość, dla której obliczamy skrót (w bitach)
     :return: Skrót wiadomości msg
     """
-
     N = int(len(msg) / 1024)
-    msg_blocks = [msg[i:i + 1024] for i in range(N)]
+    msg_blocks = [msg[i*1024:i*1024 + 1024] for i in range(N)]
     h_seq = [['{0:064b}'.format(el) for el in INIT_VALUES]]  # Ustawienie wartości inicjalnych w formacie binarnym
 
     iterator = 0  # Dodatkowy iterator pętli dla ułatwienia zapisu
@@ -166,3 +164,6 @@ def sha384(msg):
     """
     pad_msg = pad_1024(msg)
     return sha384_algorithm(pad_msg)
+
+arg = "b0dbbf4a421ba5c5b0e52f09629801c113258c252f29898c3354706e39ec5824be523d0e2f8cfe022cd61165301274d5d621a59755f50404d8b802371ce616defa962e3636ae934ec34e4bcf77a16c7eff8cf4cc08a0f4849d6ad4307e9f8df83f24ad16ab46d1a61d2d7d4e21681eb2ae281a1a5f9bca8573a3f5281d308a5a"
+print(hex(int(sha384(bin(int(arg, 16))[2:]), 2))[2:] == "c3cfb7a4e01caa58cc8756cb1a75805a566f9609c984e243042d82d0cde64c5ac27b294ff857d449f19f443dae0d2d9f")
